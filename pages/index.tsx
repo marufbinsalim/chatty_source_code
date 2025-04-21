@@ -1,9 +1,12 @@
 import useUsers from "@/hooks/useUsers";
+import { goToThread } from "@/utils/functions/goToThread";
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import { CircleDashed, LogOutIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const MainPage = () => {
+  const router = useRouter();
   const [searchTerm, setSearchTerm] = useState("");
   const { user, isLoaded } = useUser();
   const { users, isLoaded: isUsersLoaded } = useUsers(searchTerm, user?.id);
@@ -91,8 +94,8 @@ const MainPage = () => {
 
           {/* User Cards */}
           {users.length > 0 && (
-            <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-y-scroll flex-1 md:p-4 pb-8">
-              {users.map((user, index) => (
+            <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-y-auto flex-1 md:p-4 pb-8">
+              {users.map((currentUser, index) => (
                 <div
                   key={index}
                   className="bg-white p-6 border border-gray-300 rounded-lg shadow-lg relative max-h-max"
@@ -108,15 +111,24 @@ const MainPage = () => {
                     </div>
                     <div>
                       <h2 className="text-xl font-semibold truncate max-w-[50vw] md:max-w-[8vw]">
-                        {user.username}
+                        {currentUser.username}
                       </h2>
                       <p className="text-sm text-gray-500 truncate max-w-[50vw] md:max-w-[8vw]">
-                        {user.email}
+                        {currentUser.email}
                       </p>
                     </div>
                   </div>
 
-                  <button className="absolute bottom-4  right-4 bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition-all focus:outline-none">
+                  <button
+                    onClick={async () => {
+                      const thread_id = await goToThread(
+                        user?.id || "",
+                        currentUser.id,
+                      );
+                      router.push(`/chat/${thread_id}`);
+                    }}
+                    className="absolute bottom-4  right-4 bg-indigo-600 text-white px-4 py-2 rounded-full hover:bg-indigo-700 transition-all focus:outline-none"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5"
