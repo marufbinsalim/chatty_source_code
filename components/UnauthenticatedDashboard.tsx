@@ -25,7 +25,7 @@ export default function UnauthenticatedDashboard() {
           </div>
 
           {/* User Avatar & Name (Fully Right) */}
-          <SignInButton mode="modal">
+          <SignInButton mode="modal" signUpForceRedirectUrl="/api/new-user">
             <button className="bg-indigo-50 text-indigo-600 cursor-pointer font-extrabold px-4 py-2 rounded-lg shadow-md transition duration-200 z-10 flex">
               <p>Sign In</p>
               <LogInIcon className="ml-2" fontWeight={4} />
@@ -52,7 +52,7 @@ export default function UnauthenticatedDashboard() {
             the app!
           </p>
         </div>
-        <SignInButton mode="modal">
+        <SignInButton mode="modal" signUpForceRedirectUrl="/api/new-user">
           <button className="bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-md flex z-10 gap-2 cursor-pointer">
             <p>Sign In</p>
             <LogInIcon />
