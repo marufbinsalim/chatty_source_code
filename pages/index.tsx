@@ -1,3 +1,4 @@
+import LoadingSpinner from "@/components/LoadingSpinner";
 import useUsers from "@/hooks/useUsers";
 import { goToThread } from "@/utils/functions/goToThread";
 import { SignOutButton, useUser } from "@clerk/nextjs";
@@ -14,9 +15,9 @@ const MainPage = () => {
   if (!isLoaded || !isUsersLoaded) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <CircleDashed className="animate-spin text-indigo-600" size={50} />
+       <LoadingSpinner/>
       </div>
-    );
+    )
   }
 
   return (
@@ -50,6 +51,7 @@ const MainPage = () => {
               }
               alt="User Avatar"
               className="w-10 h-10 rounded-full"
+              onClick={() => router.push("/profile")}
             />
             <span className="font-medium">{user?.fullName}</span>
             <SignOutButton>

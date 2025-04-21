@@ -12,7 +12,7 @@ export default function useUsers(
   searchTerm: string,
   id: string | null | undefined,
 ) {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<User[]>([]); 
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -23,7 +23,10 @@ export default function useUsers(
         .select("*")
         .order("created_at", { ascending: false });
       console.log("Fetched users:", data, error);
-      setUsers(data as User[]);
+      if (error) {
+        console.error("Error fetching users:", error);
+      }
+      setUsers(data as User[] || []);
       setIsLoaded(true);
     };
 
@@ -31,11 +34,11 @@ export default function useUsers(
   }, []);
 
   return {
-    users: users.filter(
-      (user) =>
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        user.id !== id,
-    ),
+    users: users?.filter((user) =>
+      user.email.toLowerCase().includes(searchTerm.toLowerCase()) &&
+      user.id !== id
+    ) || [],
     isLoaded,
+    error: null // Replace with actual error handling if needed
   };
 }
