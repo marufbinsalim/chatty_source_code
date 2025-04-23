@@ -182,7 +182,7 @@ export default function ThreadId() {
                   onClick={() => router.push(`/chat/${thread.thread_id}`)}
                 >
                   <div className="flex items-center space-x-3">
-                    <div className="rounded-full w-12 h-12 bg-gray-300 flex items-center justify-center">
+                    <div className="rounded-full w-12 h-12 min-w-12 min-h-12 bg-gray-300 flex items-center justify-center">
                       <span className="text-white text-lg font-semibold">
                         {thread.other_user?.username?.charAt(0).toUpperCase() ||
                           thread.other_user?.email?.charAt(0).toUpperCase()}
@@ -193,7 +193,7 @@ export default function ThreadId() {
                         {thread.other_user?.username ||
                           thread.other_user?.email}
                       </h3>
-                      <p className="text-sm text-gray-600 line-clamp-1">
+                      <p className="text-sm text-gray-600 max-w-[80%] line-clamp-1">
                         {thread.last_message}
                       </p>
                     </div>
