@@ -1,20 +1,20 @@
-import { useParams, useRouter } from 'next/navigation';
-import { useUser } from '@clerk/nextjs';
-import useMessenger from '@/hooks/useMessenger';
-import useMessageHistory from '@/hooks/useMessageHistory';
-import { useEffect, useState, useMemo } from 'react';
+import { useParams, useRouter } from "next/navigation";
+import { useUser } from "@clerk/nextjs";
+import useMessenger from "@/hooks/useMessenger";
+import useMessageHistory from "@/hooks/useMessageHistory";
+import { useEffect, useState, useMemo } from "react";
 
 export default function ThreadId() {
   const params = useParams();
   const router = useRouter();
   const { user } = useUser();
   const [threadId, setThreadId] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     if (!params) {
-      console.error('No thread_id parameter found');
-      router.push('/chat');
+      console.error("No thread_id parameter found");
+      // router.push('/chat');
       return;
     }
 
@@ -31,7 +31,7 @@ export default function ThreadId() {
     isSending,
     error: messengerError,
     formatTime,
-  } = useMessenger(threadId || '');
+  } = useMessenger(threadId || "");
 
   const {
     history,
@@ -40,13 +40,13 @@ export default function ThreadId() {
   } = useMessageHistory();
 
   const filteredHistory = useMemo(() => {
-    return history.filter(thread => {
+    return history.filter((thread) => {
       if (!searchQuery.trim()) return true;
 
       const searchLower = searchQuery.toLowerCase();
-      const username = thread.other_user?.username?.toLowerCase() || '';
-      const email = thread.other_user?.email?.toLowerCase() || '';
-      const lastMessage = thread.last_message?.toLowerCase() || '';
+      const username = thread.other_user?.username?.toLowerCase() || "";
+      const email = thread.other_user?.email?.toLowerCase() || "";
+      const lastMessage = thread.last_message?.toLowerCase() || "";
 
       return (
         username.includes(searchLower) ||
@@ -57,7 +57,7 @@ export default function ThreadId() {
   }, [history, searchQuery]);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
@@ -80,7 +80,7 @@ export default function ThreadId() {
         <div className="flex justify-between items-center w-full px-4">
           <div className="flex items-center space-x-4">
             <button
-              onClick={() => router.push('/')}
+              onClick={() => router.push("/")}
               className="p-2 rounded-full hover:bg-indigo-700 transition-colors"
               aria-label="Go back to home"
             >
@@ -93,7 +93,11 @@ export default function ThreadId() {
                 stroke="currentColor"
                 strokeWidth="2"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                />
               </svg>
             </button>
 
@@ -117,7 +121,9 @@ export default function ThreadId() {
             <div className="rounded-full w-10 h-10 bg-gray-300 flex items-center justify-center">
               <span className="text-white text-lg font-semibold">
                 {user?.username?.charAt(0).toUpperCase() ||
-                  user?.emailAddresses[0]?.emailAddress?.charAt(0).toUpperCase()}
+                  user?.emailAddresses[0]?.emailAddress
+                    ?.charAt(0)
+                    .toUpperCase()}
               </span>
             </div>
             <span className="font-medium">
@@ -157,12 +163,16 @@ export default function ThreadId() {
           </div>
 
           {historyLoading && <div className="text-center py-4">Loading...</div>}
-          {historyError && <div className="text-red-500 text-sm">{historyError}</div>}
+          {historyError && (
+            <div className="text-red-500 text-sm">{historyError}</div>
+          )}
 
           <div className="space-y-4">
             {filteredHistory.length === 0 ? (
               <div className="text-center py-8 text-gray-500">
-                {searchQuery.trim() ? "No conversations match your search" : "No conversations found"}
+                {searchQuery.trim()
+                  ? "No conversations match your search"
+                  : "No conversations found"}
               </div>
             ) : (
               filteredHistory.map((thread) => (
@@ -180,7 +190,8 @@ export default function ThreadId() {
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold">
-                        {thread.other_user?.username || thread.other_user?.email}
+                        {thread.other_user?.username ||
+                          thread.other_user?.email}
                       </h3>
                       <p className="text-sm text-gray-600 line-clamp-1">
                         {thread.last_message}
@@ -220,8 +231,9 @@ export default function ThreadId() {
             {messages.map((msg) => (
               <div
                 key={msg.id}
-                className={`flex ${msg.sender_id === user?.id ? 'justify-end' : 'justify-start'
-                  } space-x-3`}
+                className={`flex ${
+                  msg.sender_id === user?.id ? "justify-end" : "justify-start"
+                } space-x-3`}
               >
                 {msg.sender_id !== user?.id && (
                   <div className="rounded-full w-10 h-10 bg-gray-300 flex items-center justify-center">
@@ -233,15 +245,19 @@ export default function ThreadId() {
                 )}
 
                 <div
-                  className={`relative max-w-xs p-3 rounded-lg ${msg.sender_id === user?.id
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-gray-200 text-black'
-                    }`}
+                  className={`relative max-w-xs p-3 rounded-lg ${
+                    msg.sender_id === user?.id
+                      ? "bg-indigo-600 text-white"
+                      : "bg-gray-200 text-black"
+                  }`}
                 >
                   <p>{msg.content}</p>
                   <span
-                    className={`text-xs ${msg.sender_id === user?.id ? 'text-white' : 'text-gray-500'
-                      }`}
+                    className={`text-xs ${
+                      msg.sender_id === user?.id
+                        ? "text-white"
+                        : "text-gray-500"
+                    }`}
                   >
                     {formatTime(msg.created_at)}
                   </span>
