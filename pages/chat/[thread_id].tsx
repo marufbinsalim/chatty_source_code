@@ -193,7 +193,7 @@ export default function ThreadId() {
                         {thread.other_user?.username ||
                           thread.other_user?.email}
                       </h3>
-                      <p className="text-sm text-gray-600 max-w-[80%] line-clamp-1">
+                      <p className="text-sm text-gray-600 line-clamp-1">
                         {thread.last_message}
                       </p>
                     </div>
